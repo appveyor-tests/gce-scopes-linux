@@ -6,6 +6,6 @@ test_script:
     curl -sflL "http://metadata.google.internal/0.1/meta-data/service-accounts?recursive=true" \
          -H "Metadata-Flavor: Google" |
          python -c "import json; a=json.load(open(\"/dev/stdin\",\"r\")); print json.dumps(a,indent=4,sort_keys=True)"
-    gsutil ls gs://appveyor-build-cache/ | head -n10
-    gsutil ls gs://appveyor-artifacts/ | head -n10
+- sh: gsutil ls gs://appveyor-build-cache/ | head -n10
+- sh: gsutil ls gs://appveyor-artifacts/ | head -n10
 build: off
