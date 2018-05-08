@@ -3,6 +3,7 @@ init:
 
 test_script:
 - sh: |
+    set -eo pipefail
     curl -sflL "http://metadata.google.internal/0.1/meta-data/service-accounts?recursive=true" \
          -H "Metadata-Flavor: Google" |
          python -c "import json; a=json.load(open(\"/dev/stdin\",\"r\")); print json.dumps(a,indent=4,sort_keys=True)"
