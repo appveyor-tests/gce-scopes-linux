@@ -3,11 +3,28 @@ environment:
   APPVEYOR_SSH_BLOCK: true
 
 init:
-- appveyor version
-- ps: Update-AppveyorBuild -Message "Image '$env:APPVEYOR_BUILD_WORKER_IMAGE'@'$env:APPVEYOR_BUILD_WORKER_CLOUD' cloud. $env:APPVEYOR_REPO_COMMIT_MESSAGE"
-- sh: echo $APPVEYOR_BUILD_WORKER_CLOUD
-- sh: echo $APPVEYOR_BUILD_WORKER_IMAGE
-
+ - appveyor version
+ - ps: Update-AppveyorBuild -Message "Image '$env:APPVEYOR_BUILD_WORKER_IMAGE'@'$env:APPVEYOR_BUILD_WORKER_CLOUD' cloud. $env:APPVEYOR_REPO_COMMIT_MESSAGE"
+ - sh: echo $APPVEYOR_BUILD_WORKER_CLOUD
+ - sh: echo $APPVEYOR_BUILD_WORKER_IMAGE
+ - sh: |
+     if [ $(uname -s) = "Darwin" ]; then
+         IS_MAC=true
+     else
+         IS_MAC=false
+     fi
+ - sh: |
+     if grep -Eq '/(lxc|docker)/[[:xdigit:]]{64}' /proc/1/cgroup; then
+         IS_DOCKER=true
+     else
+         IS_DOCKER=false
+     fi
+ - sh: |
+     if ! $IS_DOCKER  && ! $IS_MAC; then
+       sudo apt-get -yqq install virt-what &&
+       sudo virt-what
+     fi
+     
 test_script:
 - sh: |
     curl -sflL "http://metadata.google.internal/0.1/meta-data/service-accounts?recursive=true" \
