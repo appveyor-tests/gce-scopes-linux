@@ -22,7 +22,10 @@ init:
  - sh: |
      if ! $IS_DOCKER  && ! $IS_MAC; then
        sudo apt-get -yqq install virt-what &&
-       sudo virt-what
+       VIRT=$(sudo virt-what)
+       if [[ "$VIRT" != "kvm" ]]; then
+         echo "Virtualization is not KVM. GCE uses KVM only. Therefore this test dont make sense. Aborting"
+         appveyor exit
      fi
      
 test_script:
