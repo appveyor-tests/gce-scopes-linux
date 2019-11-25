@@ -10,6 +10,8 @@ init:
  - sh: |
      if [ $(uname -s) = "Darwin" ]; then
          IS_MAC=true
+         echo "This is macos. GCE does not provide macos VMs. Therefore this test dont make sense. Aborting"
+         appveyor exit
      else
          IS_MAC=false
      fi
