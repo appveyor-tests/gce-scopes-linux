@@ -32,8 +32,10 @@ init:
      fi
      
 test_script:
+- sh: SUB=ubuntu2204
+- sh: PY=$([[ "$IMAGE" =~ .*"$SUB".* ]] && echo "python3" || echo "python")
 - sh: |
     curl -sflL "http://metadata.google.internal/0.1/meta-data/service-accounts?recursive=true" \
          -H "Metadata-Flavor: Google" |
-         python -c "import json; a=json.load(open(\"/dev/stdin\",\"r\")); print json.dumps(a,indent=4,sort_keys=True)"
+         $PY -c "import json; a=json.load(open(\"/dev/stdin\",\"r\")); print json.dumps(a,indent=4,sort_keys=True)"
 build: off
