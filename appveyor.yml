@@ -33,7 +33,8 @@ init:
      
 test_script:
 - sh: SUB=ubuntu2204
-- sh: PY=$([[ "$IMAGE" =~ .*"$SUB".* ]] && echo "python3" || echo "python")
+- sh: PY=$([[ "$APPVEYOR_BUILD_WORKER_IMAGE" =~ .*"$SUB".* ]] && echo "python3" || echo "python")
+- sh: echo $PY
 - sh: |
     curl -sflL "http://metadata.google.internal/0.1/meta-data/service-accounts?recursive=true" \
          -H "Metadata-Flavor: Google" |
